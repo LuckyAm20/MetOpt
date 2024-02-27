@@ -45,7 +45,6 @@ def input_eqs():
         task = pickle.loads(task)
         with open("values.pickle", "rb") as file:
             task1 = pickle.load(file)
-            print(task1.to_dict())
             session["target"] = task1.target_coefs.tolist()
             session["value_right"] = task1.right_part.tolist()
             session["value_left"] = task1.constraints_array.tolist()
@@ -53,8 +52,6 @@ def input_eqs():
             session["sign"] = task1.vars_ge_zero.tolist()
             constr = session["constr"]
             sign = session["sign"]
-
-            print(sign)
 
     if request.method == "POST":
         constraint_array = []
