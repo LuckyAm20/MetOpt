@@ -1,0 +1,24 @@
+.blue-btn {
+    all: initial;
+    border-radius: 8px;
+    padding: 20px;
+    height: 56px;
+    background-color: #4caf50; /* красивый зеленый цвет */
+    color: #fff; /* белый текст */
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent; /* прозрачная граница */
+    transition: background-color 0.3s, border-color 0.3s; /* плавные переходы */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* тень */
+}
+
+.blue-btn:hover {
+    background-color: #66bb6a; /* изменение цвета при наведении */
+}
+
+.blue-btn:active {
+    background-color: #388e3c; /* изменение цвета при нажатии */
+    border-color: #388e3c; /* изменение цвета границы при нажатии */
+}
