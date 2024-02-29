@@ -1,0 +1,6 @@
+.group-4-col {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    gap: 4px;
+}
