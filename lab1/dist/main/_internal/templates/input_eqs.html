@@ -1,0 +1,74 @@
+{% extends 'base.html'%}
+{% block content %}
+<h1>Ввод уравнений</h1>
+<div class="group-32-col">
+    <h2>Заданные параметры</h2>
+    <div class="group-8-col">
+        <p><strong>Количество переменных: </strong>{{number_of_variables}}</p>
+        <p><strong>Количество ограничений: </strong>{{number_of_constraints}}</p>
+    </div>
+</div>
+<form method="POST" action="{{url_for('input_eqs')}}">
+    <div class="group-32-col">
+        <h2>Задайте уравнения</h2>
+        <div class="group-16-col">
+            <p><strong>Функция цели</strong></p>
+            <p><i>F(x) =
+                    {% for j in range(number_of_variables) %}
+                    <input placeholder="0" type="number" step="0.01" name="targ_coef_{{j}}" id="targ_coef_{{j}}"
+                        class="general-input short" value="{{ target[j] }}" required> x<sub>{{j +
+                        1}} {% if j !=
+                        number_of_variables - 1 %} + {% endif %}</sub>
+                    {% endfor %} <span>&#8594;</span> max
+                </i></p>
+        </div>
+        <div class="group-16-col">
+
+            <p><strong>Ограничения</strong></p>
+            <div class="group-8-col">
+                <ul>
+                    {% for i in range(number_of_constraints) %}
+                    <li>
+                        <p>
+                            <i>
+                                {% for j in range(number_of_variables) %}
+                                <input type="number" step="0.01" name="coef_{{i}}{{j}}" id="coef_id=coef_{{i}}{{j}}"
+                                    class="general-input short" placeholder="0" {% if value_left is not none %}value="{{ value_left[i][j] }}"{% endif %} required>
+                                x<sub>{{j
+                                    +
+                                    1}}</sub> {% if not loop.last %} + {% endif %}
+                                {% endfor %}
+                                <select style="text-align: center;" name="constraint_{{i}}" id="cond_{{i}}"
+                                    class="general-input short">
+                                    <option value=">=" {% if constr[i] == '>=' %}selected{% endif %}>≥</option>
+                                    <option value="<=" {% if constr[i] == '<=' %}selected{% endif %}>≤</option>
+                                    <option value="=" {% if constr[i] == '=' %}selected{% endif %}>=</option>
+                                </select>
+                                <input type="number" step="0.01" name="cond_value_{{i}}" id="cond_value_{{j}}"
+                                    class="general-input short" placeholder="0" value="{{ value_right[i] }}" required>
+                            </i>
+                        </p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="group-32-col">
+            <p><strong>Ограничения на знак переменных</strong></p>
+            <div class="group-16-col">
+
+                {% for i in range(number_of_variables) %}
+                <p>x<sub>{{i+1}}</sub><select style="text-align: center;" name="var_ge_{{i}}" id="var_constraints"
+                        class="general-input short">
+                        <option value=0 {% if i not in sign %}selected{% endif %}>Нет</option>
+                        <option value=1 {% if i in sign %}selected{% endif %}>Да</option>
+                    </select>≥0</p>
+
+                {% endfor %}
+            </div>
+        </div>
+
+        <input type="submit" class="blue-btn" value="Подтвердить">
+    </div>
+</form>
+{% endblock %}

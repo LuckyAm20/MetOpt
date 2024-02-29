@@ -14,7 +14,7 @@ from simplex_method.core.solve.optimal_solution import (
 )
 from simplex_method.core.solve.simplex import simplex_solve, tableauos_list
 from simplex_method.core.task.task import ConstraintsEnum, Task, TaskTypeEnum
-
+from simplex_method.core.utility.utility import set_presicion, create_in_original_basis, function_value, convert_to_arr
 from . import app
 from .forms import NumVarConstForm
 
@@ -23,7 +23,6 @@ np.set_printoptions(suppress=True)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-
     form = NumVarConstForm()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -128,11 +127,11 @@ def results():
         task = pickle.loads(task)
 
         dual_task = dualize.dualize(task)
-        canonical_task = canonical_form(task)
+        canonical_task, task_corresponding = canonical_form(task)
         task_dict = task.to_dict()
         dual_task_dict = dual_task.to_dict()
         canonical_task_dict = canonical_task.to_dict()
-        dual_canonical_form = canonical_form(dual_task)
+        dual_canonical_form, dual_task_corresponding = canonical_form(dual_task)
         dual_canonical_dict = dual_canonical_form.to_dict()
 
         try:
@@ -166,40 +165,84 @@ def results():
             return redirect(url_for("index"))
 
         point_method = {
-            "point": np.round(optimal_point, 4) if optimal_point is not None else None,
+            "point": set_presicion(np.round(optimal_point, 4)) if optimal_point is not None else None,
             "solution": (
-                np.round(optimal_solution, 4) if optimal_solution is not None else None
+                ', '.join(set_presicion(
+                    np.round(convert_to_arr(optimal_solution), 4))) if optimal_solution is not None else None
+            ),
+        }
+        point_method_original1 = create_in_original_basis(optimal_point,
+                                                          task_corresponding) if optimal_point is not None else None
+        point_method_original = {
+            "point": set_presicion(np.round(point_method_original1, 4)) if optimal_point is not None else None,
+            "solution": (
+                ', '.join(set_presicion(
+                    np.round(function_value(task, point_method_original1), 4))) if optimal_point is not None else None
             ),
         }
         simplex_method = {
-            "point": np.round(simplex_point, 4) if simplex_point is not None else None,
+            "point": set_presicion(np.round(simplex_point, 4)) if simplex_point is not None else None,
             "solution": (
-                np.round(simplex_solution, 4) if simplex_solution is not None else None
+                ', '.join(set_presicion(
+                    np.round(convert_to_arr(simplex_solution), 4))) if simplex_solution is not None else None
             ),
         }
-
+        simplex_method_original1 = create_in_original_basis(simplex_point,
+                                                            task_corresponding) if simplex_point is not None else None
+        simplex_method_original = {
+            "point": set_presicion(np.round(simplex_method_original1, 4)) if simplex_point is not None else None,
+            "solution": (
+                ', '.join(set_presicion(
+                    np.round(function_value(task, simplex_method_original1),
+                             4))) if simplex_point is not None else None
+            ),
+        }
         point_method_dual = {
             "point": (
-                np.round(dual_optimal_point, 4)
+                set_presicion(np.round(dual_optimal_point, 4))
                 if dual_optimal_point is not None
                 else None
             ),
             "solution": (
-                np.round(dual_optimal_solution, 4)
+                ', '.join(set_presicion(np.round(convert_to_arr(dual_optimal_solution), 4)))
                 if dual_optimal_solution is not None
                 else None
             ),
         }
+        point_method_dual_original1 = create_in_original_basis(dual_optimal_point,
+                                                               dual_task_corresponding) if dual_optimal_point is not None else None
+        point_method_dual_original = {
+            "point": set_presicion(
+                np.round(point_method_dual_original1, 4)) if dual_optimal_point is not None else None,
+            "solution": (
+                ', '.join(set_presicion(np.round(function_value(dual_task, point_method_dual_original1),
+                                                 4))) if dual_optimal_point is not None else None
+            ),
+        }
+
         simplex_method_dual = {
             "point": (
-                np.round(simplex_point_dual) if simplex_point_dual is not None else None
+                set_presicion(np.round(simplex_point_dual, 4)) if simplex_point_dual is not None else None
             ),
             "solution": (
-                np.round(simplex_dual_solution, 4)
+                ', '.join(set_presicion(np.round(convert_to_arr(simplex_dual_solution), 4)))
                 if simplex_dual_solution is not None
                 else None
             ),
         }
+        simplex_method_dual_original1 = create_in_original_basis(simplex_point_dual,
+                                                                 dual_task_corresponding) if simplex_point_dual is not None else None
+        simplex_method_dual_original = {
+            "point": (
+                set_presicion(np.round(simplex_method_dual_original1, 4)) if simplex_point_dual is not None else None
+            ),
+            "solution": (
+                ', '.join(set_presicion(
+                    np.round(function_value(dual_task, simplex_method_dual_original1),
+                             4))) if simplex_point_dual is not None else None
+            ),
+        }
+
 
     else:
         flash("Нужно для начала ввести задачу", "error")
@@ -217,4 +260,9 @@ def results():
         dual_canonical=dual_canonical_dict,
         point_method_dual=point_method_dual,
         simplex_method_dual=simplex_method_dual,
+        point_method_original=point_method_original,
+        point_method_dual_original=point_method_dual_original,
+        simplex_method_original=simplex_method_original,
+        simplex_method_dual_original=simplex_method_dual_original,
+
     )

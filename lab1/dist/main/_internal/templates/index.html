@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+
+
+
+{% block content %}
+<h1>Решение с помощью симплекс-метода</h1>
+
+<h2>Выбор количества переменных</h2>
+<form method="POST">
+    <div class="group-8-col">
+        {{form.hidden_tag()}}
+        <div class="group-4-col">
+            {{form.number_of_variables.label}}
+            {{form.number_of_variables(class='general-input')}}
+        </div>
+
+        <div class="group-4-col">
+            {{form.number_of_constraints.label}}
+            {{form.number_of_constraints(class='general-input')}}
+        </div>
+
+        {{form.submit(class='blue-btn')}}
+    </div>
+</form>
+{% endblock %}
