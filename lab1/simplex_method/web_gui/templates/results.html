@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <h1>Результат</h1>
-
 <div class="group-32-col">
     <h2>Исходная задача</h2>
     <div class="group-16-col">
@@ -33,24 +31,23 @@
                 </i></p>
         </div>
     </div>
-
 </div>
 <div class="group-32-col">
     <h2>Двойственная задача</h2>
     <div class="group-16-col">
         <p><strong>Функция цели</strong></p>
         <p><i>
-                F(x) =
-                {% for coef in dual_task.target_coefs %}
-                {{coef}}x<sub>{{loop.index}}</sub> {% if not loop.last %} + {% endif %}
-                {% endfor %} <span>&#8594;</span> {{dual_task.task_type}} </i>
+ F(y) =
+ {% for coef in dual_task.target_coefs %}
+ {{coef}}y<sub>{{loop.index}}</sub> {% if not loop.last %} + {% endif %}
+ {% endfor %} <span>&#8594;</span> {{dual_task.task_type}} </i>
         </p>
         <p><strong>Ограничения</strong></p>
         <div class="group-8-col">
-            {% for row in dual_task.constraints_array %}
+ {% for row in dual_task.constraints_array %}
             <p><i>
-                    {% for val in row %}
-                    {{val}}x<sub>{{loop.index}}</sub> {% if not loop.last %} + {% endif %}
+ {% for val in row %}
+ {{val}}y<sub>{{loop.index}}</sub> {% if not loop.last %} + {% endif %}
                     {% endfor %}
                     {{dual_task.constraints[loop.index0]}} {{dual_task.right_part[loop.index0]}}
                 </i></p>
@@ -60,13 +57,12 @@
         <div class="group-8-col">
             <p><i>
                     {% for var_i in dual_task.vars_ge_zero %}
-                    x<sub>{{var_i + 1}}</sub> >= 0;
+                    y<sub>{{var_i + 1}}</sub> >= 0;
                     {% endfor %}
                 </i></p>
         </div>
     </div>
 </div>
-
 <div class="group-32-col">
     <h2>Каноническая форма</h2>
     <div class="group-16-col">
@@ -98,16 +94,14 @@
         </div>
     </div>
 </div>
-
-
 <div class="group-32-col">
     <h2>Каноническая форма двойственной задачи</h2>
     <div class="group-16-col">
         <p><strong>Функция цели</strong></p>
         <p><i>
-                F(x) =
+                F(y) =
                 {% for coef in dual_canonical.target_coefs %}
-                {{coef}}x<sub>{{loop.index}}</sub> {% if not loop.last %} + {% endif %}
+                {{coef}}y<sub>{{loop.index}}</sub> {% if not loop.last %} + {% endif %}
                 {% endfor %} <span>&#8594;</span> {{dual_canonical.task_type}} </i>
         </p>
         <p><strong>Ограничения</strong></p>
@@ -115,7 +109,7 @@
             {% for row in dual_canonical.constraints_array %}
             <p><i>
                     {% for val in row %}
-                    {{val}}x<sub>{{loop.index}}</sub> {% if not loop.last %} + {% endif %}
+                    {{val}}y<sub>{{loop.index}}</sub> {% if not loop.last %} + {% endif %}
                     {% endfor %}
                     {{dual_canonical.constraints[loop.index0]}} {{dual_canonical.right_part[loop.index0]}}
                 </i></p>
@@ -125,45 +119,52 @@
         <div class="group-8-col">
             <p><i>
                     {% for var_i in dual_canonical.vars_ge_zero %}
-                    x<sub>{{var_i + 1}}</sub> >= 0;
+                    y<sub>{{var_i + 1}}</sub> >= 0;
                     {% endfor %}
                 </i></p>
         </div>
     </div>
 </div>
-
-
-
-
 <div class="group-32-col">
     <h2>Метод перебора крайних точек для исходной задачи</h2>
     <div class="group-16-col">
-        <strong>Решение:</strong>
+        <strong>Решение в базисе канонической формы:</strong>
         <div class="group-8-col">
-            <p><i><strong>x</strong>={{point_method.point}}</i></p>
-            <p><i>F(<strong>x</strong>)={{point_method.solution}}</i></p>
+            <p><i><strong>x</strong>={{point_method.point|replace("'", '')}}</i></p>
+            <p><i>F(<strong>x</strong>)={{point_method.solution|replace("'", '')}}</i></p>
         </div>
     </div>
-</div>
-
+    <div class="group-16-col">
+        <strong>Решение в исходном базисе:</strong>
+        <div class="group-8-col">
+            <p><i><strong>x</strong>={{point_method_original.point|replace("'", '')}}</i></p>
+            <p><i>F(<strong>x</strong>)={{point_method_original.solution|replace("'", '')}}</i></p>
+        </div>
+    </div>
+    </div>
 <div class="group-32-col">
     <h2>Метод перебора крайних точек для двойственной задачи</h2>
     <div class="group-16-col">
-        <strong>Решение:</strong>
+        <strong>Решение в базисе канонической формы:</strong>
         <div class="group-8-col">
-            <p><i><strong>x</strong>={{point_method_dual.point}}</i></p>
-            <p><i>F(<strong>x</strong>)={{point_method_dual.solution}}</i></p>
+            <p><i><strong>y</strong>={{point_method_dual.point|replace("'", '')}}</i></p>
+            <p><i>F(<strong>y</strong>)={{point_method_dual.solution|replace("'", '')}}</i></p>
         </div>
     </div>
-</div>
-
+    <div class="group-16-col">
+        <strong>Решение в исходном базисе:</strong>
+        <div class="group-8-col">
+            <p><i><strong>y</strong>={{point_method_dual_original.point|replace("'", '')}}</i></p>
+            <p><i>F(<strong>y</strong>)={{point_method_dual_original.solution|replace("'", '')}}</i></p>
+        </div>
+    </div>
+    </div>
 <head>
     <style>
         .table {
             display: flex;
             flex-direction: column;
         }
-
         .table div {
             border: 1px solid black;
             padding: 10px; /* Увеличьте размер текста здесь */
@@ -177,8 +178,13 @@
         <div class="group-16-col">
             <strong>Решение:</strong>
             <div class="group-8-col">
-                <p><i><strong>x</strong>={{simplex_method.point}}</i></p>
-                <p><i>F(<strong>x</strong>)={{simplex_method.solution}}</i></p>
+                <p><i><strong>x</strong>={{simplex_method.point|replace("'", '')}}</i></p>
+                <p><i>F(<strong>x</strong>)={{simplex_method.solution|replace("'", '')}}</i></p>
+            </div>
+            <strong>Решение в исходном базисе:</strong>
+            <div class="group-8-col">
+                <p><i><strong>x</strong>={{simplex_method_original.point|replace("'", '')}}</i></p>
+                <p><i>F(<strong>x</strong>)={{simplex_method_original.solution|replace("'", '')}}</i></p>
             </div>
             <p><strong>Таблицы на каждой итерации:</strong></p>
             <div class="group-8-col">
@@ -193,14 +199,18 @@
             </div>
         </div>
     </div>
-
     <div class="group-32-col">
     <h2>Симплекс-метод двойственной задачи</h2>
     <div class="group-16-col">
         <strong>Решение:</strong>
         <div class="group-8-col">
-            <p><i><strong>x</strong>={{simplex_method_dual.point}}</i></p>
-            <p><i>F(<strong>x</strong>)={{simplex_method_dual.solution}}</i></p>
+            <p><i><strong>y</strong>={{point_method_dual.point|replace("'", '')}}</i></p>
+            <p><i>F(<strong>y</strong>)={{point_method_dual.solution|replace("'", '')}}</i></p>
+        </div>
+        <strong>Решение в исходном базисе:</strong>
+        <div class="group-8-col">
+            <p><i><strong>y</strong>={{point_method_dual_original.point|replace("'", '')}}</i></p>
+            <p><i>F(<strong>y</strong>)={{point_method_dual_original.solution|replace("'", '')}}</i></p>
         </div>
         <p><strong>Таблицы на каждой итерации:</strong></p>
         <div class="group-8-col">
