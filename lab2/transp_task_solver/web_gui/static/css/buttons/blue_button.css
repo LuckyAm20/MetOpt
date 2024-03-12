@@ -3,7 +3,7 @@
     border-radius: 8px;
     padding: 20px;
     height: 56px;
-    background-color: #173499;
+    background-color: #4CAF50;
 
     color: white;
 
@@ -16,10 +16,10 @@
 
 .blue-btn:hover {
 
-    background-color: #7D9AFF;
+    background-color: #81C784;
 }
 
 .blue-btn:active {
-    background-color: #081133;
+    background-color: #388E3C;
 
 }
