@@ -31,21 +31,7 @@
     </table>
 </div>
 
-<div class="group-32-col">
-    <h2>История решений</h2>
-    <div class="group-16-col">
 
-
-        {% for row in task.get_history() %}
-        <div class="group-4-col">
-            <p>{{loop.index}}. {% if loop.first %} После метода северо-западного угла {% else %} Итерация:
-                {{loop.index0}} {% endif %}</p>
-            <pre>
-{{row}}</pre>
-        </div>
-        {% endfor %}
-    </div>
-</div>
 
 <div class="group-32-col">
     <h2>Циклы</h2>
