@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Ввод транспортной задачи</h1>
+
+{% if not nm.n or not nm.m %}
+
+<div class="error-text">
+    Необходимо задать количество <a href="{{url_for('index')}}"> потребителей и поставщиков!</a>
+</div>
+
+{% else %}
+
+<div class="group-32-col">
+    <h2>Справка</h2>
+    <div class="group-16-col">
+        <p>Последний столбец соответствует <i>a<sub>i</sub></i> , т.е. количству груза в <i>i</i>-ом пункте хранения.
+            Последняя строка
+            соответствует <i>b<sub>j</sub></i> , т.е. количеству суточной потребности <i>j</i> -го пункта назначения
+            (или
+            потребителя).
+        </p>
+        <p>Все остальные ячейки соответсвуют элементами <i>c<sub>ij</sub></i>, т.е. стоимости перевозки из пункта
+            <i>i</i> в
+            пункт <i>j</i>.
+        </p>
+    </div>
+</div>
+<div class="group-32-col">
+    <h2>Ввод задачи</h2>
+    <form method="POST">
+        <div class="group-16-col">
+            <table>
+                <thead>
+                    <tr>
+                        <td scope="col">
+                            <div></div>
+                        </td>
+                        {% for i in range(nm.m) %}
+                        <th scope="col"><i>b<sub>{{i+1}}</sub></i></th>
+                        {% endfor %}
+                        <th scope="col">Запасы</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(nm.n) %}
+                    <tr>
+                        <th scope="row"><i>a<sub>{{i+1}}</sub></i></th>
+
+                        {% for j in range(nm.m) %}
+                        <td>
+                            <input style="padding: 0; text-align: center; font-size: 12px;" name="c{{i}}{{j}}"
+                                type="number" step="0.001" placeholder="0" required {% if task %}
+                                value="{{task.c[i][j]}}"> {% endif %}
+                        </td>
+                        {% endfor %}
+
+                        <td>
+                            <input style="padding: 0; text-align: center; font-size: 12px;" name="a{{i}}" type="number"
+                                step="0.001" placeholder="0" required {% if task %} value="{{task.a[i]}}" {% endif %}>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    <tr>
+                        <th scope="row">Потр.</th>
+                        {% for i in range(nm.m) %}
+                        <td>
+                            <input style="padding: 0; text-align: center; font-size: 12px;" name="b{{i}}" type="number"
+                                step="0.001" placeholder="0" required {% if task %} value="{{task.b[i]}}" {% endif %}>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+
+            <input type="submit" class="blue-btn" value="Подтвердить">
+        </div>
+    </form>
+
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1> Метод перебора крайних точек</h1>
+
+{% if not task %}
+<div class="error-text">Ошибка. Необходимо задать задачу</div>
+{% else %}
+<div class="group-32-col">
+    <h2>Решение</h2>
+    <div class="group-16-col">
+        <p><strong>Минимальное значение целевой функции</strong></p>
+        <p><i>F = </i> {{task.optimal_points_solution}}</p>
+    </div>
+
+    <div class="group-16-col">
+        <p><strong>Найденная точка</strong></p>
+    </div>
+
+    <table>
+        <tbody>
+            {% for i in range(nm.n) %}
+            <tr>
+                {% for j in range(nm.m) %}
+                <td>
+
+                    {{task.optimal_point[i, j]}}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endif %}
+
+{% endblock %}

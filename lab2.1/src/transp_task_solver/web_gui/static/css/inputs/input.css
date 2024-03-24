@@ -1,0 +1,36 @@
+.general-input,
+input[type=number] {
+    all: initial;
+    border-radius: 8px;
+    padding: 20px;
+    height: 56px;
+    background-color: #4CAF50; /* Зеленый цвет */
+    color: white;
+    font-size: 16px;
+}
+
+input:hover {
+    background-color: #66BB6A; /* Светло-зеленый цвет при наведении */
+    border: solid 1px #878787;
+}
+
+input:focus {
+    background-color: #43A047; /* Темно-зеленый цвет при фокусе */
+    border: solid 1px #878787;
+}
+
+.general-input.short {
+    height: 32px;
+    padding: 2px;
+    width: 32px;
+    text-align: right;
+    background-color: white;
+    border: solid 1px #4CAF50; /* Зеленый цвет */
+    color: #000;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

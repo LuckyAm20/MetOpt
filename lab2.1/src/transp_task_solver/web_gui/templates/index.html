@@ -1,0 +1,23 @@
+{% extends 'base.html'%}
+{% block content %}
+<h1>Решение транспортной задачи с помощью метода потенциалов</h1>
+
+
+<div class="group-32-col">
+    <h2>Выбор количества поставщиков и потребителей</h2>
+    <form method="POST">
+        <div class="group-16-col">
+            <div class="group-4-col">
+                <p><label for="numOfA">Количество поставщиков <i>a<sub>i</sub> </i></label> </p>
+                <input name="numOfA" id="numOfA" type="number" min="1" value={{nm.n}} required>
+            </div>
+            <div class="group-4-col">
+                <p><label for="numOfB">Количество потребителей <i> b<sub>j</sub></i> </label> </p>
+                <input name="numOfB" id="numOfB" type="number" , min="1" , value={{nm.m}} required>
+            </div>
+            <input type="submit" class="blue-btn" value="Подтвердить">
+        </div>
+    </form>
+</div>
+
+{% endblock %}

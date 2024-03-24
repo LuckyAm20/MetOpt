@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Закрытая форма задачи</h1>
+{% if not task %}
+<div class="error-text">
+    Ошибка. Необходимо задать задачу
+</div>
+{% else %}
+<table>
+    <thead>
+        <tr>
+            <td scope="col">
+                <div></div>
+            </td>
+            {% for i in range(nm.m) %}
+            <th scope="col"><i>b<sub>{{i+1}}</sub></i></th>
+            {% endfor %}
+            <th scope="col">Запасы</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in range(nm.n) %}
+        <tr>
+            <th scope="row"><i>a<sub>{{i+1}}</sub></i></th>
+
+            {% for j in range(nm.m) %}
+            <td>
+                {{task.c[i][j]}}
+            </td>
+            {% endfor %}
+
+            <td>
+                {{task.a[i]}}
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <th scope="row">Потр.</th>
+            {% for i in range(nm.m) %}
+            <td>
+                {{task.b[i]}}
+            </td>
+            {% endfor %}
+        </tr>
+    </tbody>
+</table>
+<p><a href="{{url_for('potentials_solve')}}">Перейти к решению методом потенциалов</a></p>
+{% endif %}
+{% endblock %}

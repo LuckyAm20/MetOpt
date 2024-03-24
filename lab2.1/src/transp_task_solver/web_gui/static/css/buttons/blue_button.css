@@ -1,0 +1,25 @@
+.blue-btn {
+    all: initial;
+    border-radius: 8px;
+    padding: 20px;
+    height: 56px;
+    background-color: #4CAF50;
+
+    color: white;
+
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    ;
+}
+
+.blue-btn:hover {
+
+    background-color: #81C784;
+}
+
+.blue-btn:active {
+    background-color: #388E3C;
+
+}
