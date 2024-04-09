@@ -5,6 +5,7 @@ from typing import Tuple
 from simplex_method.core.task import Task
 
 tableauos_list = []
+visited_states = set()
 
 
 def create_tableau(c, A, b):
@@ -37,12 +38,10 @@ def find_basis(tableau):
 
 
 def find_pivot_position(tableau):
-    # column = np.argmin(tableau[-1, :-1])
     negative_coefs = np.where(tableau[-1, :-1] < 0)[0]
     for column in negative_coefs:
-        # column = np.where(tableau[-1, column:-1] < 0)[0][0] + column
-        ratios = tableau[:-1, -1] / tableau[:-1, column]
-        ratios[tableau[:-1, column] <= 0] = np.inf
+        ratios = tableau[:-1, -1] / tableau[:-1, column]  # b / j
+        # ratios[tableau[:-1, column] <= 0] = np.inf
         ratios[ratios <= 0] = np.inf
 
         if not np.all(np.isinf(ratios)):
@@ -51,6 +50,26 @@ def find_pivot_position(tableau):
     if np.all(np.isinf(ratios)):
         return None
     row = np.argmin(ratios)
+
+    print(f'Table: {tableau}')
+    tetta = np.min(ratios)
+
+    for column in negative_coefs:
+        ratios = tableau[:-1, -1] / tableau[:-1, column]
+        ratios[ratios <= 0] = np.inf
+
+        if tetta in ratios:
+            print(f'Pivot_vector: {tableau[:-1, -1]}')
+            # print(f'Column that : {tableau[:-1, column]}')
+
+        if not np.all(np.isinf(ratios)):
+            break
+
+    print(f'Tetta: {tetta}')
+    print(f'Basis: {tableau[row, :-1]}')
+    print()
+
+
     return row, column
 
 
@@ -71,7 +90,6 @@ def is_basic(column):
 
 
 def get_solution(tableau):
-
     # Получаем решение из таблицы
     basic_variables = []
     for col in range(tableau.shape[1] - 1):
@@ -84,22 +102,32 @@ def get_solution(tableau):
     return np.array(basic_variables)
 
 
-def simplex_solve(task: Task, max_iterations=1000):
+def simplex_solve(task: Task):
     task = deepcopy(task)
     A = task.constraints_array
     b = task.right_part
     c = task.target_coefs
     tableauos_list.clear()
+    visited_states.clear()
     tableau = create_tableau(c, A, b)
     tableauos_list.append(tableau)
     # print("init_tableau")
     # print(tableau)
     iterations = 0
-    while not is_optimal_plan(tableau) and iterations < max_iterations:
+    while not is_optimal_plan(tableau):
+        print(f'Iteration {iterations}')
         pivot_position = find_pivot_position(tableau)
         if pivot_position is None:
             return None
+        tableau_hash = hash_tableau(tableau)
+        if tableau_hash in visited_states:
+            break
+        visited_states.add(tableau_hash)
         tableau = pivot(tableau, pivot_position)
         tableauos_list.append(tableau)
         iterations += 1
     return get_solution(tableau)
+
+
+def hash_tableau(tableau):
+    return hash(tableau.tobytes())

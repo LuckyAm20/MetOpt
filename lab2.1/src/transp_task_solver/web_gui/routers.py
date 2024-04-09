@@ -37,7 +37,6 @@ def input_task():
     nm = {"n": n_a, "m": n_b}
 
     if request.method == "POST":
-        print(request.form)
         a = []
         b = []
         c = []

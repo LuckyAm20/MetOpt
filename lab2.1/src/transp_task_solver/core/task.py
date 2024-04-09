@@ -108,27 +108,27 @@ class TransportTask:
                         u[i] = self.c[i, j] - v[j]
         self.storage_u.append(np.round(u, self.to_round).tolist())
         self.storage_v.append(np.round(v, self.to_round).tolist())
-        max_d = 0
+        max_delta = 0
         f_row = f_col = 0
         basisYX = [[] for _ in range(len(self.a))]
         basisXY = [[] for _ in range(len(self.b))]
 
-        d = np.zeros_like(self._basis_vectors, dtype=np.float64)
+        delta = np.zeros_like(self._basis_vectors, dtype=np.float64)
         for i in range(self.c.shape[0]):
             for j in range(self.c.shape[1]):
                 if not self._basis_vectors[i, j]:
-                    d[i, j] = self.c[i, j] - u[i] - v[j]
-                    if d[i, j] < 0:
-                        if max_d < -d[i, j]:
-                            max_d = -d[i, j]
+                    delta[i, j] = self.c[i, j] - u[i] - v[j]
+                    if delta[i, j] < 0:
+                        if max_delta < -delta[i, j]:
+                            max_delta = -delta[i, j]
                             f_row = i
                             f_col = j
                 else:
-                    d[i, j] = self.c[i, j] - u[i] - v[j]
+                    delta[i, j] = self.c[i, j] - u[i] - v[j]
                     basisYX[i].append(j)
                     basisXY[j].append(i)
 
-        if max_d == 0:
+        if max_delta == 0:
             return False
 
         operator = "+"
@@ -142,7 +142,7 @@ class TransportTask:
         idx[1] = -1
 
         finish = False
-
+        print(f'Number of iteration {self.current_iteration}')
         while not finish:
             found = False
             p = len(cycle)
@@ -213,6 +213,8 @@ class TransportTask:
             if not found:
                 cycle = cycle[:-1]
 
+        print(self._storage_cycles)
+        print(cycle)
         dx = MAX_VALUE
         for point in cycle:
             if point.operator != "-":
