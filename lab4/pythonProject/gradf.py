@@ -128,7 +128,6 @@ class Solver:
         axis.clabel(cs, colors='black')
         plot.plot(-0.5, -1, 'r*')
         plot.show()
-        plt.savefig(os.path.join("media", f"{name}_{i}.png"))
         return fig, axis
 
 
