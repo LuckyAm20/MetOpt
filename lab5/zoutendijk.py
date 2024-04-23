@@ -5,11 +5,20 @@ import utils as u
 from scipy.optimize import linprog, OptimizeWarning
 import warnings
 from start_zoutendijk import SecZoutendijk as sz
+from math import exp, sqrt
 
 warnings.simplefilter("error", OptimizeWarning)
 
+
+def norm_sub(vec1, vec2):
+    norm = 0
+    for i in range(len(vec1)):
+        norm += (vec1[i] - vec2[i]) ** 2
+    return sqrt(norm)
+
+
 class Zoitendijk:
-    def __init__(self, task : t.Task):
+    def __init__(self, task: t.Task):
         self.task = task
         return
 
@@ -20,7 +29,7 @@ class Zoitendijk:
         return x
 
     # Function which will find additional direction
-    def findDirection(self, x_k : list, delta_k : float) -> list():
+    def findDirection(self, x_k: list, delta_k: float) -> list():
         nearActiveIndex = u.getNearActiveIndexes(self.task.limits, x_k, delta_k)
 
         A_ub = np.zeros(shape=(1 + len(nearActiveIndex), self.task.dimention + 1))
@@ -53,7 +62,7 @@ class Zoitendijk:
             warnings.simplefilter("ignore")
             return linprog(c, A_ub, b_ub, A_eq, b_eq, bounds, 'simplex')
 
-    def ifZoitendijkMethodNeedToStop(self, x_min : list, delta_k : float, eta_k : float) -> bool:
+    def ifZoitendijkMethodNeedToStop(self, x_min: list, delta_k: float, eta_k: float) -> bool:
         activeLims = u.getActiveIndexes(self.task.limits, x_min)
         allRestrictionDeltas = list()
         c = list()
@@ -64,12 +73,17 @@ class Zoitendijk:
                 c.append(lim)
                 allRestrictionDeltas.append(self.task.limits[lim](x_min))
         delta_0k = -max(allRestrictionDeltas)
-        print(str(delta_k), end=' ')
-        print(str(delta_0k), end=' ')
-        print(str(allRestrictionDeltas), end=' ')
+        print()
+        print("$\ delta_{k} =", end=' \\num{')
+        print(str(delta_k), end='}$ , ')
+        print("$\ delta_{0k} =", end=' \\num{')
+        print(str(delta_0k), end='}$ \\\\')
+        print()
+        print("Ограничения =", end=' ')
+        print(str(allRestrictionDeltas), end=' \\\\')
         return (abs(eta_k) < u.ZERO_EPS and delta_k < delta_0k)
 
-    def isNeedToFragmentStep(self, x_k : list, alpha_k : float, s_k : list, eta_k : float):
+    def isNeedToFragmentStep(self, x_k: list, alpha_k: float, s_k: list, eta_k: float):
         x_tmp = u.vecSum(x_k, u.vecMul(alpha_k, s_k))
         firstCondition = self.task.f(x_tmp) <= self.task.f(x_k) + 1 / 2 * eta_k * alpha_k
         secondCondition = True
@@ -80,17 +94,18 @@ class Zoitendijk:
 
         return (firstCondition and secondCondition) == False
 
-
     # Function which will find minimum solving Zoitendijk method
-    def solver(self, alpha : float, lambd : float):
+    def solver(self, alpha: float, lambd: float):
         # find first position
+        x_opt = [-1 / (sqrt(10)), - sqrt(2 / 5), 0]
+        f_x_opt = sqrt(5 / 2)
         x_k = self.firstApproxim()
         k = 0
         alpha_k = alpha
         delta_k = 0.25
-        
+
         while True:
-            print('#' + str(k), end=' ')
+            print('\nIteration ' + str(k), end=' \\\\')
             # Step 1: find additional direction
             s_and_eta = self.findDirection(x_k, delta_k)
             s_k = list()
@@ -111,9 +126,18 @@ class Zoitendijk:
             if self.ifZoitendijkMethodNeedToStop(x_k, delta_k, eta_k):
                 break
             k += 1
-            print(str(x_k), end=' ')
-            print(str(eta_k), end=' ')
-            print(str(self.task.f(x_k)), end=' ')
-            print(str(u.ZERO_EPS))
+
+            # print(str(eta_k), end=' ')
+            # print(str(u.ZERO_EPS),  end=' ')
+            print()
+            print("$x_{k} =", end=' ')
+            print(str(x_k), end='$\\\\ ')
+            print("$f(x_{k}) =", end=' \\num{')
+            print(str(self.task.f(x_k)), end='}$\\\\ ')
+            print()
+            print("$||x_{k} - x_{opt}|| = ", end=' \\num{')
+            print(str(norm_sub(x_k, x_opt)), end=' }$\\\\ ')
+            print(" $|f(x_k)-f(x_{opt})| =", end=' \\num{')
+            print(str(abs(f_x_opt - self.task.f(x_k))), end='}$\\\\')
 
         return x_k

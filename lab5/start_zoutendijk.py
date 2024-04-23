@@ -63,7 +63,7 @@ class SecZoutendijk:
         # create secondary task restrictions : '+1' for additional variable 'eta'
         # limits with '<= 0' sign
         self.limits = [
-            lambda x : x[0] ** 2 + x[1] ** 2 + x[2] ** 2 - 2 - x[3],
+            lambda x : x[0] ** 2 + x[1] ** 2 + x[2] ** 2 - 1/2 - x[3],
             lambda x : x[0] ** 2 + x[1] ** 2 - 3 - x[3],
             lambda x : x[1] ** 2 - 3 - x[3],
         ]
