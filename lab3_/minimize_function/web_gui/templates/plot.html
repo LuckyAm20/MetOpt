@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>График функции</h2>
+{% if plot_url %}
+<img src={{plot_url}} alt="Plot" />
+
+    {% endif %}
+    <h2>График невязки аргумента от заданной точности</h2>
+{% if plot_mistake_url %}
+<img src={{plot_mistake_url}} alt="Plot" />
+
+    {% endif %}
+        <h2>График невязки значения функции от заданной точности</h2>
+{% if plot_mistake_url_y %}
+<img src={{plot_mistake_url_y}} alt="Plot" />
+
+    {% endif %}
+    <h2>График количества вызовов функций от заданной точности</h2>
+{% if plot_calls_url %}
+<img src={{plot_calls_url}} alt="Plot" />
+{% endif %}
+
+{% endblock %}

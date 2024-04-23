@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Решение методом потенциалов</h1>
+
+{% if not task %}
+<div class="error-text">Ошибка. Необходимо задать задачу</div>
+{% else %}
+<div class="group-32-col">
+    <h2>Решение</h2>
+    <div class="group-16-col">
+        <p><strong>Минимальное значение целевой функции</strong></p>
+        <p><i>F</i> = {{task.get_target_function()}} (min)</p>
+    </div>
+
+    <div class="group-16-col">
+        <p><strong>Оптимальный план</strong></p>
+    </div>
+
+    <table>
+        <tbody>
+            {% for row in task.get_transportations() %}
+            <tr>
+                {% for col in row %}
+                <td>{{col}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+        </thead>
+    </table>
+</div>
+
+<div class="group-32-col">
+    <h2>История решений</h2>
+    <div class="group-16-col">
+
+
+        {% for row in task.get_history() %}
+        <div class="group-4-col">
+            <p>{{loop.index}}. {% if loop.first %} После метода северо-западного угла {% else %} Итерация:
+                {{loop.index0}} {% endif %}</p>
+            <pre>
+{{row}}</pre>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="group-32-col">
+    <h2>Циклы</h2>
+    <p>Ниже предсталены таблицы и циклы, отображенные цветом. Красным цветом отображается с -, а зеленым с +.</p>
+    {% for style in cells_styles %}
+    {% set outer_loop = loop %}
+    <table>
+        <thead>
+            <tr>
+                <td scope="col">
+                    <div></div>
+                </td>
+                {% for i in range(nm.m) %}
+                <th scope="col"><i>b<sub>{{i+1}}</sub></i></th>
+                {% endfor %}
+                <th scope="col">Запасы</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(nm.n) %}
+            <tr>
+                <th scope="row"><i>a<sub>{{i+1}}</sub></i></th>
+
+                {% for j in range(nm.m) %}
+                <td {% if style[i][j]=='+' %} class="green" {% endif %} {% if style[i][j]=='-' %} class="red" {% endif
+                    %}>
+                    {{task.c[i][j]}}
+                </td>
+                {% endfor %}
+
+                <td>
+                    {{task.a[i]}}
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <th scope="row">Потр.</th>
+                {% for i in range(nm.m) %}
+                <td>
+                    {{task.b[i]}}
+                </td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

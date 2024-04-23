@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/table.css')}}">
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/nav/nav.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/nav/items/nav_items.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/nav/items/item/nav_items_item.css')}}">
+
+
+    <link rel="stylesheet" href="{{url_for('static', filename='css/root.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/containers/main.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/containers/group_32.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/containers/group_16.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/containers/group_8.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/containers/group_4.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/inputs/input.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/typography.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/buttons/blue_button.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/error.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/nav.css')}}">
+
+    <title>Симплекс-метод</title>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-items">
+            <a class="nav-items-item" href="{{url_for('index')}}">Вернуться в начало</a>
+            <a class="nav-items-item" href="{{url_for('input_task')}}">Ввод задачи</a>
+            <a class="nav-items-item" href="{{url_for('closed_form_of_task')}}">Закрытая форма задачи</a>
+            <a class="nav-items-item" href="{{url_for('potentials_solve')}}">Решение методом потенциалов</a>
+            <a class="nav-items-item" href="{{url_for('points_solve')}}">Решение методом перебора</a>
+        </div>
+    </nav>
+    <div id="main">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+            <li class="error-text">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+
+</html>

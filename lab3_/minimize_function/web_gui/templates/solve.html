@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Вычисления</h1>
+
+{% if context %}
+<div class="group-32-col">
+    <h2>Решение с помощью метода золотого сечения</h2>
+
+    {% for solution in context.golden_ratio_solutions %}
+
+    <div class="group-4-col">
+        <p><strong>{{loop.index}}.</strong></p>
+        <p><strong>Точность: </strong>{{solution.tol}}</p>
+        <p><strong>x<sub>min</sub>: </strong>{{solution.solution}}</p>
+        <p><strong>Количество вычислений функции: </strong>{{solution.call_count}}</p>
+        <p><i>f(x<sub>min</sub>) = {{solution.f}}</i></p>
+    </div>
+    {% endfor %}
+
+</div>
+
+
+<div class="group-32-col">
+    <h2>Решение с помощью метода Фибоначи</h2>
+
+    {% for solution in context.fibonacci_solutions %}
+
+    <div class="group-4-col">
+        <p><strong>{{loop.index}}.</strong></p>
+        <p><strong>Точность: </strong>{{solution.tol}}</p>
+        <p><strong>x<sub>min</sub>: </strong>{{solution.solution}}</p>
+        <p><strong>Количество вычислений функции: </strong>{{solution.call_count}}</p>
+        <p><i>f(x<sub>min</sub>) = {{solution.f}}</i></p>
+    </div>
+    {% endfor %}
+
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,42 @@
+table {
+
+    font-size: 18px;
+    border: 1px solid rgb(83, 83, 83);
+    border-radius: 8px;
+    width: fit-content;
+    align-self: center;
+
+}
+
+thead th,
+thead td {
+    display: inline-flex;
+    justify-content: space-between;
+    width: 64px;
+    padding: 0;
+    align-items: center;
+    /* max-width: 80px; */
+    margin: 0;
+}
+
+
+tbody td,
+tbody th {
+    display: inline-flex;
+    align-items: center;
+    width: 64px;
+}
+
+
+
+tbody td>input[type=number] {
+    max-width: 60px;
+}
+
+tbody td.green {
+    background-color: green;
+}
+
+tbody td.red {
+    background-color: red;
+}
